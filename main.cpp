@@ -5,12 +5,12 @@ using namespace std;
 const int ASCII_ZERO = 48;
 const int ASCII_NINE = 57;
 
-bool numStringCheck(char numString[], int& startOfMantissaPosition, int& length);
+bool ValidateAndGetMantissaLength(char numString[], int& startOfMantissaPosition, int& length);
 bool mantissa(char numString[], int& numerator, int& denominator);
 
 int main()
 {
-    char numString[] = "-4.";
+    char numString[] = "-4.120000";
     int numerator = 0;
     int denominator = 0;
     bool retval = mantissa(numString, numerator, denominator);
@@ -23,7 +23,7 @@ int main()
 //This function will go through the numString and check to see if there are any
 //invalid chracters, it will store where the mantissa starts in the numString, and
 //it will store the length of the mantissa
-bool numStringCheck(char numString[], int& startOfMantissaPosition, int& mantissaLength)
+bool ValidateAndGetMantissaLength(char numString[], int& startOfMantissaPosition, int& mantissaLength)
 {
     const int decimalVal = '.';
 
@@ -102,7 +102,7 @@ bool mantissa(char numString[], int& numerator, int& denominator)
 
     //numStringCheck returns whether or not we have a valid numString so we will only
     //build the mantissa if it is valid
-    if(numStringCheck(numString, startOfMantissaPosition, mantissaLength))
+    if(ValidateAndGetMantissaLength(numString, startOfMantissaPosition, mantissaLength))
     {
         retval = true;
 
