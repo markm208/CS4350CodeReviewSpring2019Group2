@@ -3,10 +3,17 @@
 using namespace std;
 
 // Function Template declarations
-bool multiply(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len);
+bool multiply(int c1,
+              int n1,
+              int d1,
+              int c2,
+              int n2,
+              int d2,
+              char result[],
+              int len);
 bool longNumerAndDenomToCharArray(char result[],
-                                  unsigned long numer,
-                                  unsigned long denom,
+                                  unsigned int numer,
+                                  unsigned int denom,
                                   int maxLength,
                                   bool isNegative);
 int makePositive(int toStrip);
@@ -50,12 +57,28 @@ int main() {
 
 // "c1, n1, d1" are "characteristic, numerator, denominator" respectively.
 // "c2, n2, d2" are to be multiplied against "c1, n1, d1".
-// The output is stored into `result[]`, with a max-length of `len` (incl. \0 terminator)
+// The output is stored into `result[]`, with a max-length of `len` (incl. \0
+// terminator)
 //
-bool multiply(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len) {
-    // Quick check to make sure `d1` and `d2` are != 0,
-    // since we can't divide by 0
-    if (d1 == 0 || d2 == 0) {
+bool multiply(int c1,
+              int n1,
+              int d1,
+              int c2,
+              int n2,
+              int d2,
+              char result[],
+              int len) {
+    // Quick check to make sure `d1` and `d2` are ! <= 0,
+    // since we can't divide by 0, and only the
+    // characteristic should ever be negative
+
+    if (d1 <= 0 || d2 <= 0) {
+        return false;
+    }
+
+    // Also return false if either numerator is < 0,
+    // since characteristic shouldn't be negative ever.
+    if (n1 < 0 || n2 < 0) {
         return false;
     }
 
@@ -64,8 +87,8 @@ bool multiply(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int
     // if `true`, the 0th char will be "-".
     bool resultIsNegative = (c1 > 0 && c2 < 0) || (c1 > 0 && c2 < 0);
 
-    // As `resultIsNegative` is known, we can do the remaining math much easier with
-    // positive characteristic values
+    // As `resultIsNegative` is known, we can do the remaining math much easier
+    // with positive characteristic values
     c1 = makePositive(c1);
     c2 = makePositive(c2);
 
@@ -73,22 +96,28 @@ bool multiply(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int
     // which is 2.5 * 10.
     // Allows us to perform non-floating point operations on
     // regularly floating point numbers.
-    unsigned long asLong1 = (c1 * d1) + n1;
-    unsigned long asLong2 = (c2 * d2) + n2;
+    unsigned int asLong1 = (c1 * d1) + n1;
+    unsigned int asLong2 = (c2 * d2) + n2;
 
-    // Since `asLong1/2` essentially store a numerator,
+    // Check for int overflow, return false
+    if (INT_MAX / asLong1 > asLong2) {
+        return false;
+    }
+
+    // Since `asLong1/2` essentially stores a numerator,
     // to successfully multiply we can do `(numer * numer) / (denom * denom)`.
-    unsigned long combinedNumer = asLong1 * asLong2;
-    unsigned long combinedDenom = d1 * d2;
+    unsigned int combinedNumer = asLong1 * asLong2;
+    unsigned int combinedDenom = d1 * d2;
 
-    longNumerAndDenomToCharArray(result, combinedNumer, combinedDenom, len, resultIsNegative);
+    longNumerAndDenomToCharArray(result, combinedNumer, combinedDenom, len,
+                                 resultIsNegative);
 
     return true;
 }
 
 bool longNumerAndDenomToCharArray(char result[],
-                                  unsigned long numer,
-                                  unsigned long denom,
+                                  unsigned int numer,
+                                  unsigned int denom,
                                   int maxLength,
                                   bool isNegative) {
     int insertIndex = 0;
@@ -112,6 +141,6 @@ int makePositive(int toStrip) {
     return toStrip;
 }
 
-char numToChar(int input){
+char numToChar(int input) {
     return ASCII_ZERO + input;
 }
