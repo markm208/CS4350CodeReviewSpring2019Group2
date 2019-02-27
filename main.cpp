@@ -100,7 +100,7 @@ bool mantissa(char numString[], int& numerator, int& denominator)
     //This variable will be passed to numStringCheck to store the length of the mantissa
     int mantissaLength = 0;
 
-    //numStringCheck returns whether or not we have a valid numString so we will only
+    //ValidateAndGetMantissaLength returns whether or not we have a valid numString so we will only
     //build the mantissa if it is valid
     if(ValidateAndGetMantissaLength(numString, startOfMantissaPosition, mantissaLength))
     {
