@@ -11,13 +11,15 @@ struct Fraction{
 
 bool add(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len);
 int findLCM(int d1, int d2);
-bool isNegative(int c, int n, int d);
 int convertToImproper(Fraction fraction); //--> Would probably have to return a c string.... 12,10 where 12 is the numerator/10 is denominator
-void freeAndNull(void **ptr);
 int abs(int num);
 void printFractions(Fraction firstFraction);
+int gcd(int, int);
+
+
 Fraction addFractions(Fraction firstFraction, Fraction secondFraction); 
 Fraction changeSigns(Fraction fraction);
+Fraction simplifyFraction(Fraction fraction);
 
 
 int main()
@@ -117,7 +119,7 @@ bool add(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len)
    secondFraction = changeSigns(secondFraction);
 
     cout << endl;
-    cout << "SIGNS SHOULD BE CORRECT" << endl;
+    cout << "Fractions to be added" << endl;
     printFractions(firstFraction);
     printFractions(secondFraction);
     cout << endl;
@@ -140,32 +142,23 @@ bool add(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len)
         secondFraction.denominator = secondFraction.denominator * multiplier;
         secondFraction.numerator = secondFraction.numerator * multiplier;
     }
-    //All fractions should now be imporoper and have correct LCM
-    cout << endl;
-    printFractions(firstFraction);
-    printFractions(secondFraction);
-    cout << endl;
 
     answer = addFractions(firstFraction, secondFraction);
     //Add
+
+    answer = simplifyFraction(answer);
+
     cout << endl;
+    cout << "Reduced Fraction" << endl;
     printFractions(answer);
     cout << endl;
+    
     //Mod final result
 
     //Long division
 
     //Fill result[]
 
-
-
-
-    //Buffers used for helper functions
-    char *improperConversionPtr = (char *)malloc(len);
-
- //   convertToImproper(improperConversionPtr, c1, n1, d1, len);
-
-    freeAndNull((void**)improperConversionPtr);
 
     return retVal;
 }
@@ -176,15 +169,10 @@ int convertToImproper(Fraction fraction) //--> Would probably have to return a c
 
     return newNumerator;
 }
-void freeAndNull(void **ptr)
-{
-   free(*ptr);
-   *ptr = NULL;
-}
 int abs(int v) 
 {
   return v * ( (v<0) * (-1) + (v>0));
-  // simpler: v * ((v>0) - (v<0))   thanks Jens
+
 }
 void printFractions(Fraction firstFraction)
 {
@@ -244,6 +232,19 @@ Fraction changeSigns(Fraction fraction)
 
     return correctSigns;
 }
+Fraction simplifyFraction(Fraction fraction)
+{
+    Fraction simplifiedFraction;
+
+    int greatestCommonDivisor;
+
+    greatestCommonDivisor = gcd(fraction.numerator, fraction.denominator);
+
+    simplifiedFraction.numerator = fraction.numerator / greatestCommonDivisor;
+    simplifiedFraction.denominator = fraction.denominator / greatestCommonDivisor;
+
+    return simplifiedFraction;   
+}
 Fraction addFractions(Fraction firstFraction, Fraction secondFraction)
 {
     Fraction answer; 
@@ -260,3 +261,9 @@ Fraction addFractions(Fraction firstFraction, Fraction secondFraction)
     return answer;
 
 }
+int gcd(int a, int b)
+{ 
+    if (a == 0) 
+        return b; 
+    return gcd(b % a, a); 
+} 
