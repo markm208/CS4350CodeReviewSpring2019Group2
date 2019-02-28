@@ -15,40 +15,6 @@ char digitToChar(int inputDigit);
 // End Function Template declarations
 
 int main() {
-    //
-    // Test Code
-    //
-
-    int c1 = -2;
-    int n1 = 5;
-    int d1 = 8;
-
-    int c2 = 8;
-    int n2 = 42;
-    int d2 = 100;
-
-    // 17,682 / 800 ==
-    // 2.625 * 8.42 == 22.1025
-
-    char* testOut = new char[100];
-
-    multiply(c1, n1, d1, c2, n2, d2, testOut, 100);
-
-    // TEST PRINT
-    cout << "main:: ";
-    int i = 0;
-    char c = testOut[i++];
-    while (c != '\0') {
-        cout << c;
-        c = testOut[i++];
-    }
-    cout << endl;
-    // END TEST PRINT
-
-    //
-    // End Test Code
-    //
-
     return 0;
 }
 
