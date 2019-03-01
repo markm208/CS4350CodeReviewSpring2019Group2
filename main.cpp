@@ -1,81 +1,95 @@
 #include <iostream> //do not include anything other than this
 
 using namespace std;
-
-struct Fraction{
+//Fraction Struct that represents each fraction in equation
+struct Fraction
+{
     char sign;
     int constant;
     int numerator;
     int denominator;
 };
-
+//Addition function I'm implementing
 bool add(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len);
+//Finds the least Common multiple between the denominators passed in
 int findLCM(int d1, int d2);
-int convertToImproper(Fraction fraction); //--> Would probably have to return a c string.... 12,10 where 12 is the numerator/10 is denominator
+//Converts a Fraction Object to an improper fraction
+int convertToImproper(Fraction fraction); 
+//Returns the absolute value of the value passed in
 int abs(int num);
+//toString method that prints the passed in Fraction
 void printFractions(Fraction firstFraction);
+//Returns the greatest common divisior 
 int gcd(int, int);
-
-
-Fraction addFractions(Fraction firstFraction, Fraction secondFraction); 
+//Gets the number of digits in a specific number
+int getNumDigits(int numerator);
+//Long division Function
+void longDivision(Fraction &answer, char result[], int len);
+//Splits the dividend up into a char[] to be used in the long divsion func
+void splitDividend(int numerator, char dividend[],int sizeOfDividend);
+//Fraction function that add's the two fractions together
+Fraction addFractions(Fraction firstFraction, Fraction secondFraction);
+//Changes the sign's of the fractions if neccessary
 Fraction changeSigns(Fraction fraction);
-Fraction simplifyFraction(Fraction fraction);
-
+//Simpliefies the fractions if necessary
+void simplifyFraction(Fraction &fraction);
+//Free's any pointers allocated to prevent memory leaks
+void freeAndNull(void **ptr);
 
 int main()
 {
 
     char answer[10];
     int c1, n1, d1;
-    int c2, n2, d2; 
-    
-    cout << "1******************" << endl;
+    int c2, n2, d2;
+
+    cout << "******************" << endl;
     c1 = 1;
     n1 = 2;
     d1 = 6;
- 
+
     c2 = 0;
     n2 = 5;
-    d2 = 1; 
+    d2 = 1;
 
-    add(c1,n1,d1,c2,n2,d2,answer,10);
+    add(c1, n1, d1, c2, n2, d2, answer, 10);
     cout << endl;
-    cout << "2*****************" << endl;
+    cout << "*****************" << endl;
 
     c1 = -1;
     n1 = 2;
     d1 = 6;
- 
+
     c2 = 0;
     n2 = 5;
-    d2 = 1; 
+    d2 = 1;
 
-    add(c1,n1,d1,c2,n2,d2,answer,10);
+    add(c1, n1, d1, c2, n2, d2, answer, 10);
     cout << endl;
-    cout << "3*****************" << endl;
+    cout << "*****************" << endl;
     c1 = 1;
     n1 = 2;
     d1 = 6;
- 
+
     c2 = -0;
     n2 = -5;
-    d2 = 1; 
+    d2 = 1;
 
-    add(c1,n1,d1,c2,n2,d2,answer,10);
+    add(c1, n1, d1, c2, n2, d2, answer, 10);
     cout << endl;
-    cout << "4*****************" << endl;
+    cout << "*****************" << endl;
 
     c1 = -1;
     n1 = 2;
     d1 = 6;
- 
+
     c2 = 0;
     n2 = -5;
-    d2 = 1; 
+    d2 = 1;
 
-    add(c1,n1,d1,c2,n2,d2,answer,10);
+    add(c1, n1, d1, c2, n2, d2, answer, 10);
     cout << endl;
-    cout << "5*****************" << endl;
+    cout << "*****************" << endl;
 
     return 0;
 }
@@ -90,12 +104,13 @@ bool add(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len)
 
     bool retVal;
     int lcm;
-    if(d1 == 0 || d2 == 0)
+    //Can't divide by 0
+    if (d1 == 0 || d2 == 0)
     {
         retVal = false;
         return retVal;
     }
-
+    //Assign all the passed in variables to 2 fraction objects
     firstFraction.constant = c1;
     firstFraction.numerator = n1;
     firstFraction.denominator = d1;
@@ -103,83 +118,98 @@ bool add(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len)
     secondFraction.constant = c2;
     secondFraction.numerator = n2;
     secondFraction.denominator = d2;
-    
-
-    //AT THIS POINT, EACH INDIVIDUAL FRACTION HAS THEIR CORRECT SIGN and IS PARSED
 
     //Convert to improper
-   firstFraction.numerator = convertToImproper(firstFraction);
-   firstFraction.constant = '\0';
-   
-   secondFraction.numerator = convertToImproper(secondFraction);
-   secondFraction.constant = '\0';
+    firstFraction.numerator = convertToImproper(firstFraction);
+    firstFraction.constant = '\0';
 
-   //Then get the sign
-   firstFraction = changeSigns(firstFraction);
-   secondFraction = changeSigns(secondFraction);
+    secondFraction.numerator = convertToImproper(secondFraction);
+    secondFraction.constant = '\0';
 
-    cout << endl;
-    cout << "Fractions to be added" << endl;
-    printFractions(firstFraction);
-    printFractions(secondFraction);
-    cout << endl;
+    //Changes the sign of the fraction
+    firstFraction = changeSigns(firstFraction);
+    secondFraction = changeSigns(secondFraction);
+    //Gets Least Common Multiple
+    lcm = findLCM(d1, d2);
 
-    lcm = findLCM(d1,d2);
-    //What to multiply the fraction by.
-
-    if(firstFraction.denominator != lcm)
+    //Multplies two improper fractions if denominator is not LCM
+    if (firstFraction.denominator != lcm)
     {
-        int multiplier = lcm/firstFraction.denominator;
-    
+        int multiplier = lcm / firstFraction.denominator;
+
         firstFraction.denominator = firstFraction.denominator * multiplier;
         firstFraction.numerator = firstFraction.numerator * multiplier;
     }
 
-    if(secondFraction.denominator != lcm)
+    if (secondFraction.denominator != lcm)
     {
-        int multiplier = lcm/secondFraction.denominator;
+        int multiplier = lcm / secondFraction.denominator;
 
         secondFraction.denominator = secondFraction.denominator * multiplier;
         secondFraction.numerator = secondFraction.numerator * multiplier;
     }
 
+    //Add the two fractions together
     answer = addFractions(firstFraction, secondFraction);
-    //Add
+    //Simplify the two fractions if necessary
+    simplifyFraction(answer);
 
-    answer = simplifyFraction(answer);
-
-    cout << endl;
-    cout << "Reduced Fraction" << endl;
-    printFractions(answer);
-    cout << endl;
-    
-    //Mod final result
-
-    //Long division
-
-    //Fill result[]
-
+    //Ignoring the - sign for actual divison
+    if(answer.denominator < 0 || answer.numerator < 0)
+    {
+        answer.sign = '-';
+        answer.denominator = abs(answer.denominator);
+        answer.numerator = abs(answer.numerator);
+    }
+    longDivision(answer, result, len);
 
     return retVal;
 }
-int convertToImproper(Fraction fraction) //--> Would probably have to return a c string.... 12,10 where 12 is the numerator/10 is denominator
+void longDivision(Fraction &answer, char result[], int len)
+{   
+    
+    //Doesn't work
+    int size;
+    size = getNumDigits(answer.numerator);
+    //Need one extra for padding 
+    size++;
+    char * dividend = (char*) malloc(size);
+
+    int divisor;
+    
+    divisor = answer.denominator;
+    splitDividend(answer.numerator, dividend, size);
+
+}
+
+int getNumDigits(int numerator)
+{
+    int numDigits = 0;
+    int temp = numerator;
+    while(temp)
+    {
+        temp % 10;
+        temp /= 10;
+        numDigits++;
+    }
+    return numDigits;
+}
+int convertToImproper(Fraction fraction)
 {
     int newNumerator;
-    newNumerator =  (fraction.denominator * fraction.constant) + fraction.numerator;
+    newNumerator = (fraction.denominator * fraction.constant) + fraction.numerator;
 
     return newNumerator;
 }
-int abs(int v) 
+int abs(int v)
 {
-  return v * ( (v<0) * (-1) + (v>0));
-
+    return v * ((v < 0) * (-1) + (v > 0));
 }
 void printFractions(Fraction firstFraction)
 {
-    if(firstFraction.sign == '+')
+    if (firstFraction.sign == '+')
     {
         cout << "Fraction: " << firstFraction.constant << " " << firstFraction.numerator << "/" << firstFraction.denominator << endl;
-        //print without
     }
     else
     {
@@ -191,17 +221,15 @@ int findLCM(int d1, int d2)
     int lcm;
 
     //If they're equal or d1 is bigger
-    if((d1 > d2) || (d1 == d2)) 
+    if ((d1 > d2) || (d1 == d2))
         lcm = d1;
-    else if(d2 > d1)
+    else if (d2 > d1)
         lcm = d2;
 
-    //Very slow first implementation
-    //Will improve runtime
-    while(true)
-    {   //If both denominators are evenly divisible by the lcm value, you've reached the lowest multiple 
+    while (true)
+    { //If both denominators are evenly divisible by the lcm value, you've reached the lowest multiple
         //for both fractions
-        if((lcm % d1 == 0) && (lcm % d2 == 0))
+        if ((lcm % d1 == 0) && (lcm % d2 == 0))
         {
             break;
         }
@@ -214,8 +242,8 @@ Fraction changeSigns(Fraction fraction)
     printFractions(fraction);
     Fraction correctSigns;
     //if both are numerator and denominator are less than zero, abs on bottom
-    if((fraction.numerator < 0 && fraction.denominator < 0) ||
-    (fraction.numerator > 0 && fraction.denominator > 0))
+    if ((fraction.numerator < 0 && fraction.denominator < 0) ||
+        (fraction.numerator > 0 && fraction.denominator > 0))
     {
         correctSigns.numerator = abs(fraction.numerator);
         correctSigns.denominator = abs(fraction.denominator);
@@ -232,26 +260,24 @@ Fraction changeSigns(Fraction fraction)
 
     return correctSigns;
 }
-Fraction simplifyFraction(Fraction fraction)
+void simplifyFraction(Fraction &fraction)
 {
-    Fraction simplifiedFraction;
-
     int greatestCommonDivisor;
 
+    //Get the greatest commmon divisor for the fraction
     greatestCommonDivisor = gcd(fraction.numerator, fraction.denominator);
 
-    simplifiedFraction.numerator = fraction.numerator / greatestCommonDivisor;
-    simplifiedFraction.denominator = fraction.denominator / greatestCommonDivisor;
-
-    return simplifiedFraction;   
+    //Divide the numerator and denominator by the GCD
+    fraction.numerator = fraction.numerator / greatestCommonDivisor;
+    fraction.denominator = fraction.denominator / greatestCommonDivisor;
 }
 Fraction addFractions(Fraction firstFraction, Fraction secondFraction)
 {
-    Fraction answer; 
+    Fraction answer;
     answer.denominator = secondFraction.denominator;
     answer.numerator = firstFraction.numerator + secondFraction.numerator;
 
-    if(answer.numerator <= -0)
+    if (answer.numerator <= -0)
     {
         answer.sign = '-';
     }
@@ -259,11 +285,22 @@ Fraction addFractions(Fraction firstFraction, Fraction secondFraction)
         answer.sign = '+';
 
     return answer;
-
 }
-int gcd(int a, int b)
-{ 
-    if (a == 0) 
-        return b; 
-    return gcd(b % a, a); 
-} 
+int gcd(int numerator, int denominator)
+{
+    if (numerator == 0)
+    {
+        return denominator;
+    }
+    return gcd(denominator % numerator, numerator);
+}
+void splitDividend(int numerator, char dividend[], int sizeOfDividend)
+{
+    sprintf(dividend, "%ld", numerator);
+}
+
+void freeAndNull(void **ptr)
+{
+   free(*ptr);
+   *ptr = NULL;
+}
