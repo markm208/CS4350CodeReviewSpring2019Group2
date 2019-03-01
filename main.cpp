@@ -10,7 +10,7 @@ int arrToInt(char * validatedString);
 
 int main()
 {
-	char number[] = "   -.53245456";
+	char number[] = "  123.53245456";
 	int c = 0;
 
 	characteristic(number, c);
