@@ -38,7 +38,10 @@ void freeAndNull(void **ptr);
 
 int main()
 {
-
+    /*
+    Long divsion doesn't work
+    No result returned
+    */
     char answer[10];
     int c1, n1, d1;
     int c2, n2, d2;
@@ -54,42 +57,6 @@ int main()
 
     add(c1, n1, d1, c2, n2, d2, answer, 10);
     cout << endl;
-    cout << "*****************" << endl;
-
-    c1 = -1;
-    n1 = 2;
-    d1 = 6;
-
-    c2 = 0;
-    n2 = 5;
-    d2 = 1;
-
-    add(c1, n1, d1, c2, n2, d2, answer, 10);
-    cout << endl;
-    cout << "*****************" << endl;
-    c1 = 1;
-    n1 = 2;
-    d1 = 6;
-
-    c2 = -0;
-    n2 = -5;
-    d2 = 1;
-
-    add(c1, n1, d1, c2, n2, d2, answer, 10);
-    cout << endl;
-    cout << "*****************" << endl;
-
-    c1 = -1;
-    n1 = 2;
-    d1 = 6;
-
-    c2 = 0;
-    n2 = -5;
-    d2 = 1;
-
-    add(c1, n1, d1, c2, n2, d2, answer, 10);
-    cout << endl;
-    cout << "*****************" << endl;
 
     return 0;
 }
@@ -102,7 +69,7 @@ bool add(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len)
     Fraction secondFraction;
     Fraction answer;
 
-    bool retVal;
+    bool retVal = true;
     int lcm;
     //Can't divide by 0
     if (d1 == 0 || d2 == 0)
@@ -160,6 +127,12 @@ bool add(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len)
         answer.sign = '-';
         answer.denominator = abs(answer.denominator);
         answer.numerator = abs(answer.numerator);
+    }
+    int sizeCheck = getNumDigits(answer.numerator);
+    //Size check for result char array
+    if(sizeCheck < len)
+    {
+        return false;
     }
     longDivision(answer, result, len);
 
