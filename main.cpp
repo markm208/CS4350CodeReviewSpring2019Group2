@@ -11,30 +11,29 @@ struct Fraction
 };
 //Addition function I'm implementing
 bool add(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len);
-//Finds the least Common multiple between the denominators passed in
+
 int findLCM(int d1, int d2);
-//Converts a Fraction Object to an improper fraction
+
 int convertToImproper(Fraction fraction); 
-//Returns the absolute value of the value passed in
+
 int abs(int num);
-//toString method that prints the passed in Fraction
+
 void printFractions(Fraction firstFraction);
-//Returns the greatest common divisior 
+
 int gcd(int, int);
-//Gets the number of digits in a specific number
+
 int getNumDigits(int numerator);
-//Long division Function
+
 void longDivision(Fraction &answer, char result[], int len);
-//Splits the dividend up into a char[] to be used in the long divsion func
+
 void splitDividend(int numerator, char dividend[],int sizeOfDividend);
-//Fraction function that add's the two fractions together
+
 Fraction addFractions(Fraction firstFraction, Fraction secondFraction);
-//Changes the sign's of the fractions if neccessary
-Fraction changeSigns(Fraction fraction);
-//Simpliefies the fractions if necessary
+
+Fraction changeFractionSign(Fraction fraction);
+
 void simplifyFraction(Fraction &fraction);
-//Free's any pointers allocated to prevent memory leaks
-void freeAndNull(void **ptr);
+
 
 int main()
 {
@@ -94,8 +93,8 @@ bool add(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len)
     secondFraction.constant = '\0';
 
     //Changes the sign of the fraction
-    firstFraction = changeSigns(firstFraction);
-    secondFraction = changeSigns(secondFraction);
+    firstFraction = changeFractionSign(firstFraction);
+    secondFraction = changeFractionSign(secondFraction);
     //Gets Least Common Multiple
     lcm = findLCM(d1, d2);
 
@@ -130,7 +129,7 @@ bool add(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len)
     }
     int sizeCheck = getNumDigits(answer.numerator);
     //Size check for result char array
-    if(sizeCheck < len)
+    if(sizeCheck > len)
     {
         return false;
     }
@@ -138,23 +137,40 @@ bool add(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len)
 
     return retVal;
 }
+
+//Long division Function
 void longDivision(Fraction &answer, char result[], int len)
 {   
+    int size = getNumDigits(answer.numerator);
+     //Need one extra for padding 
+     size++;
+     char * dividend = (char*) malloc(size);
     
-    //Doesn't work
-    int size;
-    size = getNumDigits(answer.numerator);
-    //Need one extra for padding 
-    size++;
-    char * dividend = (char*) malloc(size);
-
-    int divisor;
-    
-    divisor = answer.denominator;
+    int divisor = answer.denominator;
     splitDividend(answer.numerator, dividend, size);
+    
+    int idx = 0; 
+    int temp = dividend[idx] - '0'; 
+    while (temp < divisor) 
+       temp = temp * 10 + (dividend[++idx] - '0'); 
+
+    while (size > idx) 
+    { 
+        result += (temp / divisor) + '0'; 
+          
+        temp = (temp % divisor) * 10 + dividend[++idx] - '0'; 
+    } 
+
+    for(int i = 0; i < 11; i++)
+    {
+        cout << result[i];
+    }
+
+   cout << "ERROR: LONG DIVISION FUNC DOES NOT WORK" << endl;
 
 }
 
+//Gets the number of digits in a specific number
 int getNumDigits(int numerator)
 {
     int numDigits = 0;
@@ -167,6 +183,8 @@ int getNumDigits(int numerator)
     }
     return numDigits;
 }
+
+//Converts a Fraction Object to an improper fraction
 int convertToImproper(Fraction fraction)
 {
     int newNumerator;
@@ -174,10 +192,14 @@ int convertToImproper(Fraction fraction)
 
     return newNumerator;
 }
+
+//Returns the absolute value of the value passed in
 int abs(int v)
 {
     return v * ((v < 0) * (-1) + (v > 0));
 }
+
+//toString method that prints the passed in Fraction
 void printFractions(Fraction firstFraction)
 {
     if (firstFraction.sign == '+')
@@ -189,12 +211,14 @@ void printFractions(Fraction firstFraction)
         cout << "Fraction: " << firstFraction.sign << firstFraction.constant << " " << firstFraction.numerator << "/" << firstFraction.denominator << endl;
     }
 }
+
+//Finds the least Common multiple between the denominators passed in
 int findLCM(int d1, int d2)
 {
     int lcm;
 
     //If they're equal or d1 is bigger
-    if ((d1 > d2) || (d1 == d2))
+    if (d1 >= d2)
         lcm = d1;
     else if (d2 > d1)
         lcm = d2;
@@ -210,7 +234,9 @@ int findLCM(int d1, int d2)
     }
     return lcm;
 }
-Fraction changeSigns(Fraction fraction)
+
+//Changes the sign's of the fractions if neccessary
+Fraction changeFractionSign(Fraction fraction)
 {
     printFractions(fraction);
     Fraction correctSigns;
@@ -233,6 +259,8 @@ Fraction changeSigns(Fraction fraction)
 
     return correctSigns;
 }
+
+//Simpliefies the fractions if necessary
 void simplifyFraction(Fraction &fraction)
 {
     int greatestCommonDivisor;
@@ -244,6 +272,8 @@ void simplifyFraction(Fraction &fraction)
     fraction.numerator = fraction.numerator / greatestCommonDivisor;
     fraction.denominator = fraction.denominator / greatestCommonDivisor;
 }
+
+//Fraction function that add's the two fractions together
 Fraction addFractions(Fraction firstFraction, Fraction secondFraction)
 {
     Fraction answer;
@@ -259,6 +289,8 @@ Fraction addFractions(Fraction firstFraction, Fraction secondFraction)
 
     return answer;
 }
+
+//Returns the greatest common divisior 
 int gcd(int numerator, int denominator)
 {
     if (numerator == 0)
@@ -267,13 +299,9 @@ int gcd(int numerator, int denominator)
     }
     return gcd(denominator % numerator, numerator);
 }
+
+//Splits the dividend up into a char[] to be used in the long divsion func
 void splitDividend(int numerator, char dividend[], int sizeOfDividend)
 {
     sprintf(dividend, "%ld", numerator);
-}
-
-void freeAndNull(void **ptr)
-{
-   free(*ptr);
-   *ptr = NULL;
 }
