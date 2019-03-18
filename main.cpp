@@ -2,19 +2,36 @@
 
 using namespace std;
 
-static const int ASCII_ZERO = 48;
-
 // Function Template declarations
 bool multiply(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len);
 void fractionToCharArray(char* result, int numer, int denom, int maxLength, bool isNegative);
-void intToCharArray(unsigned int input, char* output, int maxLength, int* resultLength);
+void intToCharArray(unsigned int input, char* output, int* resultLength);
 
 void reverseArray(char* array, int arrayLength, bool hasNullTerminator);
-int makePositive(int toStrip);
+int makePositive(int toMakePositive);
 char digitToChar(int inputDigit);
 // End Function Template declarations
 
 int main() {
+    int c1 = 2;
+    int n1 = 6;
+    int d1 = 12;
+
+    int c2 = 8;
+    int n2 = 9;
+    int d2 = 10;
+
+    int maxLength = 5;
+    char output[5];
+
+    bool success = multiply(c1, n1, d1, c2, n2, d2, output, maxLength);
+
+    if (success) {
+        cout << "OUTPUT " << output << endl;
+    } else {
+        cout << "FAIL" << endl;
+    }
+
     return 0;
 }
 
@@ -35,7 +52,7 @@ bool multiply(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int
     }
 
     // Also return false if either numerator is < 0,
-    // since characteristic shouldn't be negative ever.
+    // since only characteristic can be negative.
     if (n1 < 0 || n2 < 0) {
         return false;
     }
@@ -57,11 +74,6 @@ bool multiply(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int
     unsigned int asLong1 = (c1 * d1) + n1;
     unsigned int asLong2 = (c2 * d2) + n2;
 
-    // Check for int overflow, return false
-    // if (INT32_MAX / asLong1 > asLong2) {
-    //     return false;
-    // }
-
     // Since `asLong1&2` essentially store a numerator,
     // to successfully multiply we can do `(numer * numer) / (denom * denom)`.
     unsigned int combinedNumer = asLong1 * asLong2;
@@ -74,9 +86,10 @@ bool multiply(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int
 
 void fractionToCharArray(char* result, int numer, int denom, int maxLength, bool isNegative) {
     // Convert `numer` to a char[]
-    char numerCharArray[2048];
+    char numerCharArray[32];
+
     int resultLength = 0;
-    intToCharArray(numer, numerCharArray, maxLength, &resultLength);
+    intToCharArray(numer, numerCharArray, &resultLength);
 
     // Long division algorithm
     //
@@ -123,16 +136,27 @@ void fractionToCharArray(char* result, int numer, int denom, int maxLength, bool
     result[resultIdx] = '\0';
 }
 
-void intToCharArray(unsigned int input, char* output, int maxLength, int* resultLength) {
+void intToCharArray(unsigned int input, char* output, int* resultLength) {
+    // `currentIndex` is the position where the next digit will go
     int currentIndex = 0;
-    while (input && currentIndex < maxLength - 1) {
+
+    // Iterate over `input` digit by digit (% 10),
+    // until `input < 10`. At this point, just store the last digit
+    // into `output`.
+    while (input != 0) {
         output[currentIndex++] = digitToChar(input % 10);
-        input /= 10;
+        if(input >= 10){
+            input /= 10;
+        } else {
+            output[currentIndex++] = digitToChar(input);
+            input -= input;
+        }
     }
 
     // Null terminate
     output[currentIndex] = '\0';
-    // Reverse digits
+
+    // Reverse digits since we've built `output` backwards
     reverseArray(output, currentIndex + 1, true);
 
     // Store `resultLength`
@@ -141,28 +165,34 @@ void intToCharArray(unsigned int input, char* output, int maxLength, int* result
 
 // Reverses a `char[]` in-place
 void reverseArray(char* array, int arrayLength, bool hasNullTerminator) {
+    // Need to account for the null terminator, don't move that
     if (hasNullTerminator) {
         arrayLength -= 1;
     }
+
+    // Simple in-place flip of array elements
     for (int i = 0; i < (arrayLength / 2); i++) {
         char t = array[i];
         array[i] = array[(arrayLength - 1) - i];
         array[(arrayLength - 1) - i] = t;
     }
+
+    // No need to return since we are modifying the original `array`
 }
 
-// Will return a positive version of `toStrip`
-int makePositive(int toStrip) {
-    if (0 > toStrip) {
-        toStrip = toStrip * -1;
+// Will return a positive version of `toMakePositive`
+int makePositive(int toMakePositive) {
+    if (toMakePositive < 0) {
+        toMakePositive *= -1;
     }
-    return toStrip;
+    return toMakePositive;
 }
 
-// Offsets `inputDigits` by char-value of '0'
+// Offsets `inputDigits` by char-value of '0',
+// returning the ASCII value of the digit
 char digitToChar(int inputDigit) {
     if (inputDigit <= 9) {
-        return ASCII_ZERO + inputDigit;
+        return '0' + inputDigit;
     } else {
         // Oh no.
     }
