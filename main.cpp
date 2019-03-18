@@ -13,25 +13,6 @@ char digitToChar(int inputDigit);
 // End Function Template declarations
 
 int main() {
-    int c1 = 2;
-    int n1 = 6;
-    int d1 = 12;
-
-    int c2 = 8;
-    int n2 = 9;
-    int d2 = 10;
-
-    int maxLength = 5;
-    char output[5];
-
-    bool success = multiply(c1, n1, d1, c2, n2, d2, output, maxLength);
-
-    if (success) {
-        cout << "OUTPUT " << output << endl;
-    } else {
-        cout << "FAIL" << endl;
-    }
-
     return 0;
 }
 
