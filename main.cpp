@@ -85,6 +85,11 @@ bool ValidateAndGetMantissaLength(char numString[], int& startOfMantissaPosition
         //The overal mantissa length will be how long numString is minus the startOfMantissaPosition
         //Also note we add numOfZeros due to the fact we do not want extra zeros to be part of our mantissaLength
         mantissaLength = currentElement - (startOfMantissaPosition + numOfZeros);
+
+		if (mantissaLength >= 13)
+		{
+			retval = false;
+		}
     }
     
     return retval;
