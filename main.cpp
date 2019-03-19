@@ -1,9 +1,3 @@
-// yeet.cpp : Defines the entry point for the console application.
-//
-
-#include "stdafx.h"
-
-
 #include <iostream> //do not include anything other than this
 
 using namespace std;
