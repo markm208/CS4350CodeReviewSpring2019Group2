@@ -1,224 +1,35 @@
+// yeet.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+
 
 #include <iostream> //do not include anything other than this
 
 using namespace std;
 
-<<<<<<< HEAD
 bool subtract(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len);
-bool longDivision(int n, int d, int &cha, int &man);
-bool createDecimalString(int cha, int man, char result[], int len);
+bool longDivision(int n, int d, int &cha, int &man, bool& neg);
+bool createDecimalString(int cha, int man, char result[], int len, bool neg);
+int firstDigit(int x, int& subtraction);
 
 int main()
 {
 	char result[10];
 
-	bool yeet = subtract(0, 3, 4, 0, 3, 7, result, 10);
+	bool yeet = subtract(1, 1, 12, 2, 3, 5, result, 10);
+
 
 	system("pause");
 	return 0;
-=======
-void testCharacteristicAndMantissa();
-void shouldConvert(char number[], int expectedCharacteristic, int expectedNumerator, int expectedDenominator);
-void shouldNotConvert(char number[]);
-
-void testMath();
-void testAdd();
-void testSubtract();
-void testMultiply();
-void testDivide();
-
-int main()
-{
-	//characteristic and mantissa test
-	testCharacteristicAndMantissa();
-	
-	//math function tests
-	testMath();
-    
-    return 0;
->>>>>>> origin/main_update
 }
-//--
-void testCharacteristicAndMantissa()
-{
-	shouldConvert("123.456", 123, 456, 1000);
-	shouldConvert("    123.456", 123, 456, 1000);
-	shouldConvert("123.456    ", 123, 456, 1000);
-	shouldConvert("    123.456    ", 123, 456, 1000);
 
-	shouldConvert("+123.456", 123, 456, 1000);
-	shouldConvert("   +123.456", 123, 456, 1000);
-	shouldConvert("+123.456   ", 123, 456, 1000);
-	shouldConvert("   +123.456   ", 123, 456, 1000);
-
-	shouldConvert("-123.456", -123, 456, 1000);
-	shouldConvert("   -123.456", -123, 456, 1000);
-	shouldConvert("-123.456   ", -123, 456, 1000);
-	shouldConvert("    -123.456   ", -123, 456, 1000);
-
-	shouldConvert("0.456", 0, 456, 1000);
-	shouldConvert("   0.456", 0, 456, 1000); 
-	shouldConvert("0.456   ", 0, 456, 1000);
-	shouldConvert("   0.456   ", 0, 456, 1000);
-
-	shouldConvert("-0.456", 0, -456, 1000);
-	shouldConvert("   -0.456", 0, -456, 1000);
-	shouldConvert("-0.456   ", 0, -456, 1000);
-	shouldConvert("   -0.456   ", 0, -456, 1000);
-
-	shouldConvert(".456", 0, 456, 1000);
-	shouldConvert("    .456", 0, 456, 1000);
-	shouldConvert(".456   ", 0, 456, 1000);
-	shouldConvert("   .456   ", 0, 456, 1000);
-
-	shouldConvert("-.456", 0, -456, 1000);
-	shouldConvert("    -.456", 0, -456, 1000);
-	shouldConvert("-.456   ", 0, -456, 1000);
-	shouldConvert("   -.456   ", 0, -456, 1000);
-
-	shouldConvert("123456", 123456, 0, 10);
-	shouldConvert("   123456", 123456, 0, 10);
-	shouldConvert("123456   ", 123456, 0, 10);
-	shouldConvert("   123456   ", 123456, 0, 10);
-
-	shouldConvert("-123456", -123456, 0, 10);
-	shouldConvert("   -123456", -123456, 0, 10);
-	shouldConvert("-123456   ", -123456, 0, 10);
-	shouldConvert("   -123456   ", -123456, 0, 10);
-
-	shouldConvert("000123.456", 123, 456, 1000);
-	shouldConvert("123.45600000", 123, 456, 1000);
-	shouldConvert("00000123.45600000", 123, 456, 1000);
-
-	shouldConvert("-000123.456", -123, 456, 1000);
-	shouldConvert("-123.45600000", -123, 456, 1000);
-	shouldConvert("-00000123.45600000", -123, 456, 1000);
-
-	shouldConvert("123.00000456", 123, 456, 100000000);
-	shouldConvert("-123.00000456", -123, 456, 100000000);
-}
-//--
-void shouldConvert(char number[], int expectedCharacteristic, int expectedNumerator, int expectedDenominator)
-{
-	int c, n, d;
-
-	//if the conversion from C string to integers can take place
-	if (characteristic(number, c) && mantissa(number, n, d))
-	{
-		if (c == expectedCharacteristic && n == expectedNumerator && d == expectedDenominator)
-		{
-			//test passes, do not print anything on a successful test
-		}
-		else
-		{
-			cout << "Test failed: '" << number << "' "
-				<< "was parsed but did not produce the expected results" << endl;
-
-			if (expectedCharacteristic != c)
-			{
-				cout << "expected characteristic: " << expectedCharacteristic << " "
-					<< "actual characteristic: " << c << endl;
-			}
-
-			if (expectedNumerator != n)
-			{
-				cout << "expected numerator: " << expectedNumerator << " "
-					<< "actual numerator: " << n << endl;
-
-			}
-
-			if (expectedDenominator != d)
-			{
-				cout << "expected denominator: " << expectedDenominator << " "
-					<< "actual denominator: " << d << endl;
-			}
-		}
-	}
-	else
-	{
-		cout << "Test failed: '" << number << "' "
-			<< "was NOT parsed when it should have been." << endl;
-	}
-}
-//--
-void shouldNotConvert(char number[])
-{
-	int c, n, d;
-
-	//if the conversion from C string to integers can take place
-	if (characteristic(number, c) && mantissa(number, n, d))
-	{
-		cout << "Test failed: '" << number << "' "
-			<< "was parsed when it should NOT have been." << endl;
-	}
-}
-//--
-void testMath()
-{
-	//add
-	testAdd();
-	testSubtract();
-	testMultiply();
-	testDivide();
-}
-//--
-void testAdd()
-{
-	const int SHORT_ARRAY_LENGTH = 5;
-	char shortArray[SHORT_ARRAY_LENGTH];
-
-	const int MEDIUM_ARRAY_LENGTH = 10;
-	char mediumArray[MEDIUM_ARRAY_LENGTH];
-
-	const int LARGE_ARRAY_LENGTH = 20;
-	char largeArray[LARGE_ARRAY_LENGTH];
-
-	//should not be enough space in the array for the result
-	if (add(INT_MAX, 0, 10, INT_MAX, 0, 10, shortArray, SHORT_ARRAY_LENGTH))
-	{
-		cout << "Error: not enough space in array" << endl;
-	}
-
-	//0 + 0 = "0"
-	add(0, 0, 10, 0, 0, 10, shortArray, SHORT_ARRAY_LENGTH);
-	shouldConvert(shortArray, 0, 0, 10);
-	add(0, 0, 10, 0, 0, 10, mediumArray, MEDIUM_ARRAY_LENGTH);
-	shouldConvert(mediumArray, 0, 0, 10);
-	add(0, 0, 10, 0, 0, 10, largeArray, LARGE_ARRAY_LENGTH);
-	shouldConvert(largeArray, 0, 0, 10);
-
-	//1 + 1 = "2"
-	add(1, 0, 10, 1, 0, 10, shortArray, SHORT_ARRAY_LENGTH);
-	shouldConvert(shortArray, 2, 0, 10);
-	add(1, 0, 10, 1, 0, 10, mediumArray, MEDIUM_ARRAY_LENGTH);
-	shouldConvert(mediumArray, 2, 0, 10);
-	add(1, 0, 10, 1, 0, 10, largeArray, LARGE_ARRAY_LENGTH);
-	shouldConvert(largeArray, 2, 0, 10);
-
-	//1 + -1.5 = "-.5"
-	add(1, 0, 10, -1, 1, 2, shortArray, SHORT_ARRAY_LENGTH);
-	shouldConvert(shortArray, 0, -5, 10);
-	add(1, 0, 10, -1, 1, 2, mediumArray, MEDIUM_ARRAY_LENGTH);
-	shouldConvert(mediumArray, 0, -5, 10);
-	add(1, 0, 10, -1, 1, 2, largeArray, LARGE_ARRAY_LENGTH);
-	shouldConvert(largeArray, 0, -5, 10);
-
-	//1.125 + 1.6R = "2.79"
-	add(1, 1, 8, 1, 2, 3, shortArray, SHORT_ARRAY_LENGTH);
-	shouldConvert(shortArray, 2, 79, 100);
-
-	//1.125 + 1.6R = "2.7916666"
-	add(1, 1, 8, 1, 2, 3, mediumArray, MEDIUM_ARRAY_LENGTH);
-	shouldConvert(mediumArray, 2, 7916666, 10000000);
-
-<<<<<<< HEAD
 //new functions go here
-
 
 /**
 * c1 = characteristic 1
 * n1 = numerator of mantissa 1
-* d1 = denominator of mantissa 2
+* d1 = denominator of mantissa 1
 * c2 = characteristic 2
 * n2 = numerator of mantissa 2
 * d1 = denominator of mantissa 2
@@ -248,21 +59,28 @@ bool subtract(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int
 
 	//step 5: fuck my life
 	int cha = 0, man = 0;
-	longDivision(commonD, subtractedNum, cha, man);
+	bool neg = false;
+	longDivision(commonD, subtractedNum, cha, man, neg);
 
 	//step 6: populate result
-	createDecimalString(cha, man, result, len);
+	createDecimalString(cha, man, result, len, neg);
 
 	return false;
 }
 
-bool longDivision(int n, int d, int &cha, int &man) {
+bool longDivision(int n, int d, int &cha, int &man, bool& neg) {
 	
 	if (d == 0) {
 		return false;
 	}
+	neg = false;
 
 	int dividend = d;
+
+	if (dividend < 0) {
+		dividend = dividend * -1;
+		neg = true;
+	}
 	int digitCount = 0;
 	bool onCha = true;
 
@@ -295,7 +113,7 @@ bool longDivision(int n, int d, int &cha, int &man) {
 
 
 //BUGGED: Stores numbers backwards and breaks at the completion of the program.
-bool createDecimalString(int cha, int man, char result[], int len) {
+bool createDecimalString(int cha, int man, char result[], int len, bool neg) {
 	if (cha == 0 && man == 0) {
 		return false;
 	}
@@ -304,22 +122,37 @@ bool createDecimalString(int cha, int man, char result[], int len) {
 	char temp = 'a';
 	bool decimal = false;
 	bool lastChar = false;
+	bool done = false;
+	int last = 0;
+	int subtraction;
 
-	for (int i = 0; i < len; i++) {
+	for (int i = 0; i < len - 1; i++) {
 		if (man == 0 && cha == 0) {
-			result[i] = '\n';
+			result[i] = '\0';
 			return true;
+		}
+		if (done == true) {
+			break;
+		}
+		if (i == 0) {
+			if (neg == true) {
+				result[i] = '-';
+				i = 1;
+			}
 		}
 		if (cha > 0) {
 			if (cha >= 10) {
 				result[i] = cha % 10 + 48;
 				cha = cha / 10;
-				if (cha == 0) {
-					lastChar = true;
-				}
+
 			}
+			//were below 10
 			else {
 				result[i] = cha + 48;
+				cha = cha / 10;
+			}
+			if (cha == 0) {
+				lastChar = true;
 			}
 		}
 		else {
@@ -331,240 +164,45 @@ bool createDecimalString(int cha, int man, char result[], int len) {
 			}
 			else if (man >= 10) {
 				if (!decimal) {
-					result[i] = result[i - 1];
-					result[i - 1] = man % 10 + 48; ;
+					result[i] = firstDigit(man, subtraction) + 48;
+					man = man - subtraction;
 				}
 				else {
 					decimal = false;
-					result[i] = man % 10;
+					result[i] = firstDigit(man, subtraction) + 48;
+					man = man - subtraction;
 				}
-				man = man / 10;
 			}
 			else {
 				if (!decimal) {
-					result[i] = result[i - 1];
-					result[i - 1] = man + 48;
+					result[i] = man + 48;
 				}
 				else {
 					decimal = false;
 					result[i] = man + 48;
 				}
-				man = man / man;
+				if (man % man == 0) {
+					done = true;
+				}
+				else {
+					man = man / man;
+				}
 			}
 		}
+		last = i + 1;
 	}
 
-	result[len] = '\n';
+	result[last] = '\0';
 
 	return true;
-}}
-=======
-	//1.125 + 1.6R = "2.79166666666666666"
-	add(1, 1, 8, 1, 2, 3, largeArray, LARGE_ARRAY_LENGTH);
-	//can't use the convert function because the num/denom would overflow
-	char expectedResult[] = "2.79166666666666666";
-	for (int i = 0; i < LARGE_ARRAY_LENGTH; i++)
-	{
-		if (expectedResult[i] != largeArray[i])
-		{
-			cout << "Error: mismatch in C strings in add()." << endl
-				<< "Expected: " << expectedResult << " "
-				<< "Actual: " << largeArray
-				<< endl;
-		}
-	}
 }
-//--
-void testSubtract()
-{
-	const int SHORT_ARRAY_LENGTH = 5;
-	char shortArray[SHORT_ARRAY_LENGTH];
 
-	const int MEDIUM_ARRAY_LENGTH = 10;
-	char mediumArray[MEDIUM_ARRAY_LENGTH];
-
-	const int LARGE_ARRAY_LENGTH = 20;
-	char largeArray[LARGE_ARRAY_LENGTH];
-
-	//should not be enough space in the array for the result
-	if (subtract(INT_MIN, 0, 10, INT_MAX, 0, 10, shortArray, SHORT_ARRAY_LENGTH))
-	{
-		cout << "Error: not enough space in array" << endl;
+int firstDigit(int x, int& subtraction) {
+	int count = 1;
+	while (x > 9) {
+		x /= 10;
+		count *= 10;
 	}
-
-	//0 - 0 = "0"
-	subtract(0, 0, 10, 0, 0, 10, shortArray, SHORT_ARRAY_LENGTH);
-	shouldConvert(shortArray, 0, 0, 10);
-	subtract(0, 0, 10, 0, 0, 10, mediumArray, MEDIUM_ARRAY_LENGTH);
-	shouldConvert(mediumArray, 0, 0, 10);
-	subtract(0, 0, 10, 0, 0, 10, largeArray, LARGE_ARRAY_LENGTH);
-	shouldConvert(largeArray, 0, 0, 10);
-
-	//2 - 1 = "1"
-	subtract(2, 0, 10, 1, 0, 10, shortArray, SHORT_ARRAY_LENGTH);
-	shouldConvert(shortArray, 1, 0, 10);
-	subtract(2, 0, 10, 1, 0, 10, mediumArray, MEDIUM_ARRAY_LENGTH);
-	shouldConvert(mediumArray, 1, 0, 10);
-	subtract(2, 0, 10, 1, 0, 10, largeArray, LARGE_ARRAY_LENGTH);
-	shouldConvert(largeArray, 1, 0, 10);
-
-	//1 - -1.5 = "2.5"
-	subtract(1, 0, 10, -1, 1, 2, shortArray, SHORT_ARRAY_LENGTH);
-	shouldConvert(shortArray, 2, 5, 10);
-	subtract(1, 0, 10, -1, 1, 2, mediumArray, MEDIUM_ARRAY_LENGTH);
-	shouldConvert(mediumArray, 2, 5, 10);
-	subtract(1, 0, 10, -1, 1, 2, largeArray, LARGE_ARRAY_LENGTH);
-	shouldConvert(largeArray, 2, 5, 10);
-
-	//1.125 - 1.6R = "-.54"
-	subtract(1, 1, 8, 1, 2, 3, shortArray, SHORT_ARRAY_LENGTH);
-	shouldConvert(shortArray, 0, -54, 100);
-
-	//1.125 - 1.6R = "-.5416666"
-	subtract(1, 1, 8, 1, 2, 3, mediumArray, MEDIUM_ARRAY_LENGTH);
-	shouldConvert(mediumArray, 0, -5416666, 10000000);
-
-	//1.125 - 1.6R = "-.54166666666666666"
-	subtract(1, 1, 8, 1, 2, 3, largeArray, LARGE_ARRAY_LENGTH);
-	//can't use the convert function because the num/denom would overflow
-	char expectedResult[] = "-.54166666666666666";
-	for (int i = 0; i < LARGE_ARRAY_LENGTH; i++)
-	{
-		if (expectedResult[i] != largeArray[i])
-		{
-			cout << "Error: mismatch in C strings in subtract()." << endl
-				<< "Expected: " << expectedResult << " "
-				<< "Actual: " << largeArray
-				<< endl;
-		}
-	}
+	subtraction = x * count;
+	return x;
 }
-//--
-void testMultiply()
-{
-	const int SHORT_ARRAY_LENGTH = 5;
-	char shortArray[SHORT_ARRAY_LENGTH];
-
-	const int MEDIUM_ARRAY_LENGTH = 10;
-	char mediumArray[MEDIUM_ARRAY_LENGTH];
-
-	const int LARGE_ARRAY_LENGTH = 20;
-	char largeArray[LARGE_ARRAY_LENGTH];
-
-	//should not be enough space in the array for the result
-	if (multiply(INT_MAX, 0, 10, INT_MAX, 0, 10, shortArray, SHORT_ARRAY_LENGTH))
-	{
-		cout << "Error: not enough space in array" << endl;
-	}
-
-	//0 * 0 = "0"
-	multiply(0, 0, 10, 0, 0, 10, shortArray, SHORT_ARRAY_LENGTH);
-	shouldConvert(shortArray, 0, 0, 10);
-	multiply(0, 0, 10, 0, 0, 10, mediumArray, MEDIUM_ARRAY_LENGTH);
-	shouldConvert(mediumArray, 0, 0, 10);
-	multiply(0, 0, 10, 0, 0, 10, largeArray, LARGE_ARRAY_LENGTH);
-	shouldConvert(largeArray, 0, 0, 10);
-
-	//3 * 2 = "6"
-	multiply(3, 0, 10, 2, 0, 10, shortArray, SHORT_ARRAY_LENGTH);
-	shouldConvert(shortArray, 6, 0, 10);
-	multiply(3, 0, 10, 2, 0, 10, mediumArray, MEDIUM_ARRAY_LENGTH);
-	shouldConvert(mediumArray, 6, 0, 10);
-	multiply(3, 0, 10, 2, 0, 10, largeArray, LARGE_ARRAY_LENGTH);
-	shouldConvert(largeArray, 6, 0, 10);
-
-	//3 * -1.5 = "-4.5"
-	multiply(3, 0, 10, -1, 1, 2, shortArray, SHORT_ARRAY_LENGTH);
-	shouldConvert(shortArray, -4, 5, 10);
-	multiply(3, 0, 10, -1, 1, 2, mediumArray, MEDIUM_ARRAY_LENGTH);
-	shouldConvert(mediumArray, -4, 5, 10);
-	multiply(3, 0, 10, -1, 1, 2, largeArray, LARGE_ARRAY_LENGTH);
-	shouldConvert(largeArray, -4, 5, 10);
-
-	//1.125 * 1.6R = "1.87"
-	multiply(1, 1, 8, 1, 2, 3, shortArray, SHORT_ARRAY_LENGTH);
-	shouldConvert(shortArray, 1, 87, 100);
-
-	//1.125 * 1.6R = "1.875"
-	multiply(1, 1, 8, 1, 2, 3, mediumArray, MEDIUM_ARRAY_LENGTH);
-	shouldConvert(mediumArray, 1, 875, 1000);
-
-	//1.125 * 1.6R = "1.875"
-	multiply(1, 1, 8, 1, 2, 3, largeArray, LARGE_ARRAY_LENGTH);
-	shouldConvert(largeArray, 1, 875, 1000);
-}
-//--
-void testDivide()
-{
-	const int SHORT_ARRAY_LENGTH = 5;
-	char shortArray[SHORT_ARRAY_LENGTH];
-
-	const int MEDIUM_ARRAY_LENGTH = 10;
-	char mediumArray[MEDIUM_ARRAY_LENGTH];
-
-	const int LARGE_ARRAY_LENGTH = 20;
-	char largeArray[LARGE_ARRAY_LENGTH];
-
-	//should not be enough space in the array for the result
-	if (divide(INT_MAX, 0, 10, 1, 0, 10, shortArray, SHORT_ARRAY_LENGTH))
-	{
-		cout << "Error: not enough space in array" << endl;
-	}
-
-	//cannot divide by zero
-	if (divide(10, 0, 10, 0, 0, 10, shortArray, SHORT_ARRAY_LENGTH))
-	{
-		cout << "Error: cannot divide by zero" << endl;
-	}
-
-	//0 / 1 = "0"
-	divide(0, 0, 10, 1, 0, 10, shortArray, SHORT_ARRAY_LENGTH);
-	shouldConvert(shortArray, 0, 0, 10);
-	divide(0, 0, 10, 1, 0, 10, mediumArray, MEDIUM_ARRAY_LENGTH);
-	shouldConvert(mediumArray, 0, 0, 10);
-	divide(0, 0, 10, 1, 0, 10, largeArray, LARGE_ARRAY_LENGTH);
-	shouldConvert(largeArray, 0, 0, 10);
-
-	//6 / 3 = "2"
-	divide(6, 0, 10, 3, 0, 10, shortArray, SHORT_ARRAY_LENGTH);
-	shouldConvert(shortArray, 2, 0, 10);
-	divide(6, 0, 10, 3, 0, 10, mediumArray, MEDIUM_ARRAY_LENGTH);
-	shouldConvert(mediumArray, 2, 0, 10);
-	divide(6, 0, 10, 3, 0, 10, largeArray, LARGE_ARRAY_LENGTH);
-	shouldConvert(largeArray, 2, 0, 10);
-
-	//1 / -1.5 = "-.66"
-	divide(1, 0, 10, -1, 1, 2, shortArray, SHORT_ARRAY_LENGTH);
-	shouldConvert(shortArray, 0, -66, 100);
-	
-	//1 / -1.5 = "-.6666666"
-	divide(1, 0, 10, -1, 1, 2, mediumArray, MEDIUM_ARRAY_LENGTH);
-	shouldConvert(mediumArray, 0, -6666666, 10000000);
-	
-	//1 / -1.5 = "-.66666666666666666"
-	divide(1, 0, 10, -1, 1, 2, largeArray, LARGE_ARRAY_LENGTH);
-	char expectedResult1[] = "-.66666666666666666";
-	for (int i = 0; i < LARGE_ARRAY_LENGTH; i++)
-	{
-		if (expectedResult1[i] != largeArray[i])
-		{
-			cout << "Error: mismatch in C strings in divide()." << endl
-				<< "Expected: " << expectedResult1 << " "
-				<< "Actual: " << largeArray
-				<< endl;
-		}
-	}
-
-	//1.125 / 1.6R = "0.67"
-	divide(1, 1, 8, 1, 2, 3, shortArray, SHORT_ARRAY_LENGTH);
-	shouldConvert(shortArray, 0, 67, 100);
-
-	//1.125 / 1.6R = "0.675"
-	divide(1, 1, 8, 1, 2, 3, mediumArray, MEDIUM_ARRAY_LENGTH);
-	shouldConvert(mediumArray, 0, 675, 1000);
-
-	//1.125 / 1.6R = "0.675"
-	divide(1, 1, 8, 1, 2, 3, largeArray, LARGE_ARRAY_LENGTH);
-	shouldConvert(largeArray, 0, 675, 1000);
-}
->>>>>>> origin/main_update
