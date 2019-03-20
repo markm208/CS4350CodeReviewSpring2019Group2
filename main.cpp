@@ -1,7 +1,6 @@
-#include <iostream> //do not include anything other than this
+#include <iostream>
 
 using namespace std;
-
 
 const int ASCII_ZERO = 48;
 const int ASCII_NINE = 57;
@@ -16,6 +15,10 @@ void testSubtract();
 void testMultiply();
 void testDivide();
 
+//chaacteristic functions
+bool characteristic(char numString[], int& c);
+
+//mantissa functions
 bool ValidateAndGetMantissaLength(char numString[], int& startOfMantissaPosition, int& length);
 bool mantissa(char numString[], int& numerator, int& denominator);
 
@@ -29,6 +32,64 @@ int main()
     
     return 0;
 }
+
+
+//characteristic function will rturn true or false for if the char [] was valid input
+//and the converted int value is then stored in c
+bool characteristic(char numString[], int& c)
+{
+	bool isValid = true;
+
+	//True = positive, False = negative
+	bool sign = true;
+	//The running value of the characteristic
+	int res = 0;
+
+	char * currentAddress = numString;
+
+	//skips over leading spacess
+	while (*currentAddress == ' ')
+	{
+		currentAddress++;
+	}
+
+	//checks if string begins with + or -
+	if (*currentAddress == '+')
+	{
+		sign = true;
+		currentAddress++;
+	}
+	else if (*currentAddress == '-')
+	{
+		sign = false;
+		currentAddress++;
+	}
+
+	for (currentAddress; *currentAddress != '\0'; currentAddress++) {
+		//End of characteristic
+		if (*currentAddress == '.')
+		{
+			break;
+		}
+		else if ((*currentAddress <= ASCII_ZERO || *currentAddress >= ASCII_NINE))
+		{
+			isValid = false;
+			break;
+		}
+		else
+		{
+			//Will continue to add to res and shift digits over by multiplying res by 10
+			res = res * 10 + *currentAddress - '0';
+		}
+	}
+
+	//if everything was good, place res into c
+	if (isValid)
+		c = res; 
+
+	return isValid;
+}
+
 
 //This function will go through the numString and check to see if there are any
 //invalid chracters, it will store where the mantissa starts in the numString, and
@@ -557,4 +618,3 @@ void testDivide()
 	divide(1, 1, 8, 1, 2, 3, largeArray, LARGE_ARRAY_LENGTH);
 	shouldConvert(largeArray, 0, 675, 1000);
 }
-
