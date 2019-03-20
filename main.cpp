@@ -26,7 +26,7 @@ int getNumDigits(int numerator);
 
 void longDivision(Fraction &answer, char result[], int len);
 
-void splitDividend(int numerator, char dividend[],int sizeOfDividend);
+void splitDividend(char* numerator, int dividend,int sizeOfDividend);
 
 Fraction addFractions(Fraction firstFraction, Fraction secondFraction);
 
@@ -34,6 +34,9 @@ Fraction changeFractionSign(Fraction fraction);
 
 void simplifyFraction(Fraction &fraction);
 
+void intToChar(int number, char* parsedNumerator);
+
+void reverseOrder(char* parsedNumerator, int dividend);
 
 int main()
 {
@@ -138,35 +141,111 @@ bool add(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len)
     return retVal;
 }
 
+void intToChar(int number, char* parsedNumerator)
+{
+    int position = 0;
+    while(number)
+    {
+       parsedNumerator[position] = number % 10 + 48;
+       number /= 10;
+       position++;
+    }
+    position++;
+    parsedNumerator[position] = '\0';
+    
+    
+}
+
+void reverseOrder(char* parsedNumerator, int numDigits)
+{
+    char temp;
+    int i, j = 0;
+
+ 
+    i = 0;
+    j = numDigits - 1;
+    
+    while (i < j) {
+        temp = parsedNumerator[i];
+        parsedNumerator[i] = parsedNumerator[j];
+        parsedNumerator[j] = temp;
+        i++;
+        j--;
+    }
+    
+}
 //Long division Function
 void longDivision(Fraction &answer, char result[], int len)
 {   
-    int size = getNumDigits(answer.numerator);
-     //Need one extra for padding 
-     size++;
-     char * dividend = (char*) malloc(size);
-    
     int divisor = answer.denominator;
-    splitDividend(answer.numerator, dividend, size);
-    
-    int idx = 0; 
-    int temp = dividend[idx] - '0'; 
-    while (temp < divisor) 
-       temp = temp * 10 + (dividend[++idx] - '0'); 
+    int dividend = answer.numerator;
 
-    while (size > idx) 
+    cout << "Dividing " << dividend << " by " << divisor << endl;
+
+    int numOfDigits = getNumDigits(dividend);//log10(dividend) + 1;
+    char* parsedNumerator = (char*)malloc(numOfDigits);
+    //Gonna need dividendarr to be equal to number array
+    //call intToCharArray(Here)
+    intToChar(dividend, parsedNumerator);
+    reverseOrder(parsedNumerator, numOfDigits);
+
+    int idx = 0;
+
+    int resultIndex = 0;
+
+    int temp = parsedNumerator[idx] - '0'; 
+
+    while (temp < divisor)
     { 
-        result += (temp / divisor) + '0'; 
-          
-        temp = (temp % divisor) * 10 + dividend[++idx] - '0'; 
-    } 
+       temp = (temp * 10) + (parsedNumerator[++idx] - '0'); 
+    }
 
-    for(int i = 0; i < 11; i++)
+    if(answer.sign == '-')
+    {
+        result[resultIndex] = '-';
+        resultIndex++;
+    }
+
+    while (numOfDigits > idx) 
+    { 
+        result[resultIndex] = (temp / divisor) + '0'; 
+        temp = (temp % divisor) * 10 + parsedNumerator[++idx] - '0'; 
+        resultIndex++;
+    }
+
+    int postDecimalRemainder = dividend % divisor;
+
+    cout << "POST DEVIMA: " << postDecimalRemainder << endl;
+
+    if(postDecimalRemainder > 0)
+    {
+            result[resultIndex] = '.';
+
+            resultIndex++;
+
+        while(postDecimalRemainder != 0 && resultIndex != len - 1)
+       {
+           
+           postDecimalRemainder *= 10;
+
+           int remain_part = postDecimalRemainder / divisor;
+
+            result[resultIndex] = remain_part + '0';
+
+           postDecimalRemainder = postDecimalRemainder % divisor;
+
+            resultIndex++;
+        }
+    }
+
+    result[resultIndex] = '\0';
+
+    for(int i = 0; i < len; i++)
     {
         cout << result[i];
     }
+    cout << endl;
 
-   cout << "ERROR: LONG DIVISION FUNC DOES NOT WORK" << endl;
 
 }
 
@@ -301,7 +380,10 @@ int gcd(int numerator, int denominator)
 }
 
 //Splits the dividend up into a char[] to be used in the long divsion func
-void splitDividend(int numerator, char dividend[], int sizeOfDividend)
+void splitDividend(char* arr, int dividend, int numOfDigits)
 {
-    sprintf(dividend, "%ld", numerator);
+    for(int i=0; i < numOfDigits; i++, dividend /= 10)
+    {
+	    arr[i] = dividend % 10;
+    }
 }
