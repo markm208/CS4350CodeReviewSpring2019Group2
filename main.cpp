@@ -1,6 +1,9 @@
 #include <iostream> //do not include anything other than this
+#define INT_MAX 2,147,483,647
+
 
 using namespace std;
+
 //Fraction Struct that represents each fraction in equation
 struct Fraction
 {
@@ -37,28 +40,13 @@ void simplifyFraction(Fraction &fraction);
 void intToChar(int number, char* parsedNumerator);
 
 void reverseOrder(char* parsedNumerator, int dividend);
+//Test Functions
+void testAdd();
+void shouldConvert(char number[], int expectedCharacteristic, int expectedNumerator, int expectedDenominator);
 
 int main()
 {
-    /*
-    Long divsion doesn't work
-    No result returned
-    */
-    char answer[10];
-    int c1, n1, d1;
-    int c2, n2, d2;
-
-    cout << "******************" << endl;
-    c1 = 1;
-    n1 = 2;
-    d1 = 6;
-
-    c2 = 0;
-    n2 = 5;
-    d2 = 1;
-
-    add(c1, n1, d1, c2, n2, d2, answer, 10);
-    cout << endl;
+    testAdd();
 
     return 0;
 }
@@ -74,7 +62,7 @@ bool add(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len)
     bool retVal = true;
     int lcm;
     //Can't divide by 0
-    if (d1 == 0 || d2 == 0)
+    if (d1 == 0 || d2 == 0 || len == 0)
     {
         retVal = false;
         return retVal;
@@ -130,20 +118,22 @@ bool add(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len)
         answer.denominator = abs(answer.denominator);
         answer.numerator = abs(answer.numerator);
     }
-    int sizeCheck = getNumDigits(answer.numerator);
-    //Size check for result char array
-    if(sizeCheck > len)
-    {
-        return false;
-    }
     longDivision(answer, result, len);
-
+    //Get the true size of the result array
+    size_t n = sizeof(result)/sizeof(result[0]);
+    //Print out the answer
+    cout << "Answer: ";
+    for(int i = 0; i < len; i++)
+    {
+        cout << result[i];
+    }
+    cout << endl;
     return retVal;
 }
-
 void intToChar(int number, char* parsedNumerator)
 {
     int position = 0;
+    //Converts a single integer to a char array to be used in the long div function
     while(number)
     {
        parsedNumerator[position] = number % 10 + 48;
@@ -158,6 +148,7 @@ void intToChar(int number, char* parsedNumerator)
 
 void reverseOrder(char* parsedNumerator, int numDigits)
 {
+    //Reverses the order of the char[] using simple swap algorithm
     char temp;
     int i, j = 0;
 
@@ -180,12 +171,13 @@ void longDivision(Fraction &answer, char result[], int len)
     int divisor = answer.denominator;
     int dividend = answer.numerator;
 
-    cout << "Dividing " << dividend << " by " << divisor << endl;
-
     int numOfDigits = getNumDigits(dividend);//log10(dividend) + 1;
-    char* parsedNumerator = (char*)malloc(numOfDigits);
-    //Gonna need dividendarr to be equal to number array
-    //call intToCharArray(Here)
+    char* parsedNumerator = (char*)malloc(len);
+    for(int i = 0; i < len; i++)
+    {
+        parsedNumerator[i] = ' ';
+    }
+
     intToChar(dividend, parsedNumerator);
     reverseOrder(parsedNumerator, numOfDigits);
 
@@ -215,8 +207,6 @@ void longDivision(Fraction &answer, char result[], int len)
 
     int postDecimalRemainder = dividend % divisor;
 
-    cout << "POST DEVIMA: " << postDecimalRemainder << endl;
-
     if(postDecimalRemainder > 0)
     {
             result[resultIndex] = '.';
@@ -229,7 +219,7 @@ void longDivision(Fraction &answer, char result[], int len)
            postDecimalRemainder *= 10;
 
            int remain_part = postDecimalRemainder / divisor;
-
+            cout << "REMAIN PART: " << remain_part + '0' << endl;
             result[resultIndex] = remain_part + '0';
 
            postDecimalRemainder = postDecimalRemainder % divisor;
@@ -237,14 +227,9 @@ void longDivision(Fraction &answer, char result[], int len)
             resultIndex++;
         }
     }
+    
 
-    result[resultIndex] = '\0';
-
-    for(int i = 0; i < len; i++)
-    {
-        cout << result[i];
-    }
-    cout << endl;
+    result[len] = '\0';
 
 
 }
@@ -317,7 +302,6 @@ int findLCM(int d1, int d2)
 //Changes the sign's of the fractions if neccessary
 Fraction changeFractionSign(Fraction fraction)
 {
-    printFractions(fraction);
     Fraction correctSigns;
     //if both are numerator and denominator are less than zero, abs on bottom
     if ((fraction.numerator < 0 && fraction.denominator < 0) ||
@@ -387,3 +371,102 @@ void splitDividend(char* arr, int dividend, int numOfDigits)
 	    arr[i] = dividend % 10;
     }
 }
+void testAdd()
+{
+	const int SHORT_ARRAY_LENGTH = 5;
+	char shortArray[SHORT_ARRAY_LENGTH];
+
+	const int MEDIUM_ARRAY_LENGTH = 10;
+	char mediumArray[MEDIUM_ARRAY_LENGTH];
+
+	const int LARGE_ARRAY_LENGTH = 20;
+	char largeArray[LARGE_ARRAY_LENGTH];
+
+	//should not be enough space in the array for the result
+	if (add(INT_MAX, 0, 10, INT_MAX, 0, 10, shortArray, SHORT_ARRAY_LENGTH))
+	{
+		cout << "Error: not enough space in array" << endl;
+	}
+
+	//0 + 0 = "0"
+	add(0, 0, 10, 0, 0, 10, shortArray, SHORT_ARRAY_LENGTH);
+	shouldConvert(shortArray, 0, 0, 10);
+	add(0, 0, 10, 0, 0, 10, mediumArray, MEDIUM_ARRAY_LENGTH);
+	shouldConvert(mediumArray, 0, 0, 10);
+	add(0, 0, 10, 0, 0, 10, largeArray, LARGE_ARRAY_LENGTH);
+	shouldConvert(largeArray, 0, 0, 10);
+
+	//1 + 1 = "2"
+	add(1, 0, 10, 1, 0, 10, shortArray, SHORT_ARRAY_LENGTH);
+	shouldConvert(shortArray, 2, 0, 10);
+	add(1, 0, 10, 1, 0, 10, mediumArray, MEDIUM_ARRAY_LENGTH);
+	shouldConvert(mediumArray, 2, 0, 10);
+	add(1, 0, 10, 1, 0, 10, largeArray, LARGE_ARRAY_LENGTH);
+	shouldConvert(largeArray, 2, 0, 10);
+
+	//1 + -1.5 = "-.5"
+	add(1, 0, 10, -1, 1, 2, shortArray, SHORT_ARRAY_LENGTH);
+	shouldConvert(shortArray, 0, -5, 10);
+	add(1, 0, 10, -1, 1, 2, mediumArray, MEDIUM_ARRAY_LENGTH);
+	shouldConvert(mediumArray, 0, -5, 10);
+	add(1, 0, 10, -1, 1, 2, largeArray, LARGE_ARRAY_LENGTH);
+	shouldConvert(largeArray, 0, -5, 10);
+
+	//1.125 + 1.6R = "2.79"
+	add(1, 1, 8, 1, 2, 3, shortArray, SHORT_ARRAY_LENGTH);
+	shouldConvert(shortArray, 2, 79, 100);
+
+	//1.125 + 1.6R = "2.7916666"
+	add(1, 1, 8, 1, 2, 3, mediumArray, MEDIUM_ARRAY_LENGTH);
+	shouldConvert(mediumArray, 2, 7916666, 10000000);
+
+	//1.125 + 1.6R = "2.79166666666666666"
+	add(1, 1, 8, 1, 2, 3, largeArray, LARGE_ARRAY_LENGTH);
+	//can't use the convert function because the num/denom would overflow
+	char expectedResult[] = "2.79166666666666666";
+	for (int i = 0; i < LARGE_ARRAY_LENGTH; i++)
+	{
+		if (expectedResult[i] != largeArray[i])
+		{
+			cout << "Error: mismatch in C strings in add()." << endl
+				<< "Expected: " << expectedResult << " "
+				<< "Actual: " << largeArray
+				<< endl;
+		}
+	}
+}
+void shouldConvert(char number[], int expectedCharacteristic, int expectedNumerator, int expectedDenominator)
+{
+	int c, n, d;
+
+		if (c == expectedCharacteristic && n == expectedNumerator && d == expectedDenominator)
+		{
+			//test passes, do not print anything on a successful test
+		}
+		else
+		{
+			cout << "Test failed: '" << number << "' "
+				<< "was parsed but did not produce the expected results" << endl;
+
+			if (expectedCharacteristic != c)
+			{
+				cout << "expected characteristic: " << expectedCharacteristic << " "
+					<< "actual characteristic: " << c << endl;
+			}
+
+			if (expectedNumerator != n)
+			{
+				cout << "expected numerator: " << expectedNumerator << " "
+					<< "actual numerator: " << n << endl;
+
+			}
+
+			if (expectedDenominator != d)
+			{
+				cout << "expected denominator: " << expectedDenominator << " "
+					<< "actual denominator: " << d << endl;
+			}
+		}
+
+}
+
