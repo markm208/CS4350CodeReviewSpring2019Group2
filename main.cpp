@@ -8,12 +8,6 @@ const int ASCII_NINE = 57;
 bool ValidateAndGetMantissaLength(char numString[], int& startOfMantissaPosition, int& length);
 bool mantissa(char numString[], int& numerator, int& denominator);
 
-int main()
-{
-    bool retval = mantissa(numString, numerator, denominator);
-    return 0;
-}
-
 //This function will go through the numString and check to see if there are any
 //invalid chracters, it will store where the mantissa starts in the numString, and
 //it will store the length of the mantissa
