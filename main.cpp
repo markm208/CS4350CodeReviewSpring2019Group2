@@ -16,18 +16,6 @@ bool mantissa(char numString[], int& numerator, int& denominator);
 void testCharacteristicAndMantissa();
 void shouldConvert(char number[], int expectedCharacteristic, int expectedNumerator, int expectedDenominator);
 
-int main()
-{
-	/*int c, n, d;
-
-	bool answer = mantissa("-123456", n, d);
-
-	cout << "Answer: " << answer <<endl;
-	cout << "N: " << n << "  D: " << d <<endl;*/
-	testCharacteristicAndMantissa();
-	return 0;
-}
-
 //Quade's
 bool subtract(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len);
 bool longDivision(int n, int d, int &cha, int &man, bool& neg);
