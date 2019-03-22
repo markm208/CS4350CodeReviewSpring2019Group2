@@ -7,6 +7,20 @@ const int ASCII_NINE = 57;
 
 bool ValidateAndGetMantissaLength(char numString[], int& startOfMantissaPosition, int& length);
 bool mantissa(char numString[], int& numerator, int& denominator);
+void testCharacteristicAndMantissa();
+void shouldConvert(char number[], int expectedCharacteristic, int expectedNumerator, int expectedDenominator);
+
+int main()
+{
+	/*int c, n, d;
+
+	bool answer = mantissa("-123456", n, d);
+
+	cout << "Answer: " << answer <<endl;
+	cout << "N: " << n << "  D: " << d <<endl;*/
+	testCharacteristicAndMantissa();
+	return 0;
+}
 
 //This function will go through the numString and check to see if there are any
 //invalid chracters, it will store where the mantissa starts in the numString, and
@@ -102,7 +116,7 @@ bool ValidateAndGetMantissaLength(char numString[], int& startOfMantissaPosition
 
 bool mantissa(char numString[], int& numerator, int& denominator)
 {
-    bool retval = false;
+    bool retval = true;
 
     //This variable will be passed to numStringCheck to store the initial index of the mantissa
     int startOfMantissaPosition = 0;
@@ -152,4 +166,106 @@ bool mantissa(char numString[], int& numerator, int& denominator)
     
 
     return retval;
+}
+
+void testCharacteristicAndMantissa()
+{
+	shouldConvert("123.456", 123, 456, 1000);
+	shouldConvert("    123.456", 123, 456, 1000);
+	shouldConvert("123.456    ", 123, 456, 1000);
+	shouldConvert("    123.456    ", 123, 456, 1000);
+
+	shouldConvert("+123.456", 123, 456, 1000);
+	shouldConvert("   +123.456", 123, 456, 1000);
+	shouldConvert("+123.456   ", 123, 456, 1000);
+	shouldConvert("   +123.456   ", 123, 456, 1000);
+
+	shouldConvert("-123.456", -123, 456, 1000);
+	shouldConvert("   -123.456", -123, 456, 1000);
+	shouldConvert("-123.456   ", -123, 456, 1000);
+	shouldConvert("    -123.456   ", -123, 456, 1000);
+
+	shouldConvert("0.456", 0, 456, 1000);
+	shouldConvert("   0.456", 0, 456, 1000); 
+	shouldConvert("0.456   ", 0, 456, 1000);
+	shouldConvert("   0.456   ", 0, 456, 1000);
+
+	shouldConvert("-0.456", 0, -456, 1000);
+	shouldConvert("   -0.456", 0, -456, 1000);
+	shouldConvert("-0.456   ", 0, -456, 1000);
+	shouldConvert("   -0.456   ", 0, -456, 1000);
+
+	shouldConvert(".456", 0, 456, 1000);
+	shouldConvert("    .456", 0, 456, 1000);
+	shouldConvert(".456   ", 0, 456, 1000);
+	shouldConvert("   .456   ", 0, 456, 1000);
+
+	shouldConvert("-.456", 0, -456, 1000);
+	shouldConvert("    -.456", 0, -456, 1000);
+	shouldConvert("-.456   ", 0, -456, 1000);
+	shouldConvert("   -.456   ", 0, -456, 1000);
+
+	shouldConvert("123456", 123456, 0, 10);
+	shouldConvert("   123456", 123456, 0, 10);
+	shouldConvert("123456   ", 123456, 0, 10);
+	shouldConvert("   123456   ", 123456, 0, 10);
+
+	shouldConvert("-123456", -123456, 0, 10);
+	shouldConvert("   -123456", -123456, 0, 10);
+	shouldConvert("-123456   ", -123456, 0, 10);
+	shouldConvert("   -123456   ", -123456, 0, 10);
+
+	shouldConvert("000123.456", 123, 456, 1000);
+	shouldConvert("123.45600000", 123, 456, 1000);
+	shouldConvert("00000123.45600000", 123, 456, 1000);
+
+	shouldConvert("-000123.456", -123, 456, 1000);
+	shouldConvert("-123.45600000", -123, 456, 1000);
+	shouldConvert("-00000123.45600000", -123, 456, 1000);
+
+	shouldConvert("123.00000456", 123, 456, 100000000);
+	shouldConvert("-123.00000456", -123, 456, 100000000);
+}
+
+void shouldConvert(char number[], int expectedCharacteristic, int expectedNumerator, int expectedDenominator)
+{
+	int c, n, d;
+
+	//if the conversion from C string to integers can take place
+	if (true && mantissa(number, n, d))
+	{
+		if (true && n == expectedNumerator && d == expectedDenominator)
+		{
+			//test passes, do not print anything on a successful test
+		}
+		else
+		{
+			cout << "Test failed: '" << number << "' "
+				<< "was parsed but did not produce the expected results" << endl;
+
+			if (expectedCharacteristic != c)
+			{
+				cout << "expected characteristic: " << expectedCharacteristic << " "
+					<< "actual characteristic: " << c << endl;
+			}
+
+			if (expectedNumerator != n)
+			{
+				cout << "expected numerator: " << expectedNumerator << " "
+					<< "actual numerator: " << n << endl;
+
+			}
+
+			if (expectedDenominator != d)
+			{
+				cout << "expected denominator: " << expectedDenominator << " "
+					<< "actual denominator: " << d << endl;
+			}
+		}
+	}
+	else
+	{
+		cout << "Test failed: '" << number << "' "
+			<< "was NOT parsed when it should have been." << endl;
+	}
 }
