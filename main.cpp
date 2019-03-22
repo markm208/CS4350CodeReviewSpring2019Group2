@@ -13,6 +13,20 @@ bool characteristic(char numString[], int& c);
 //mantissa functions
 bool ValidateAndGetMantissaLength(char numString[], int& startOfMantissaPosition, int& length);
 bool mantissa(char numString[], int& numerator, int& denominator);
+void testCharacteristicAndMantissa();
+void shouldConvert(char number[], int expectedCharacteristic, int expectedNumerator, int expectedDenominator);
+
+int main()
+{
+	/*int c, n, d;
+
+	bool answer = mantissa("-123456", n, d);
+
+	cout << "Answer: " << answer <<endl;
+	cout << "N: " << n << "  D: " << d <<endl;*/
+	testCharacteristicAndMantissa();
+	return 0;
+}
 
 //Quade's
 bool subtract(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len);
@@ -207,7 +221,7 @@ bool ValidateAndGetMantissaLength(char numString[], int& startOfMantissaPosition
 
 bool mantissa(char numString[], int& numerator, int& denominator)
 {
-    bool retval = false;
+    bool retval = true;
 
     //This variable will be passed to numStringCheck to store the initial index of the mantissa
     int startOfMantissaPosition = 0;
@@ -259,7 +273,6 @@ bool mantissa(char numString[], int& numerator, int& denominator)
     return retval;
 }
 
-//--
 void testCharacteristicAndMantissa()
 {
 	shouldConvert("123.456", 123, 456, 1000);
@@ -318,7 +331,8 @@ void testCharacteristicAndMantissa()
 	shouldConvert("123.00000456", 123, 456, 100000000);
 	shouldConvert("-123.00000456", -123, 456, 100000000);
 }
-//--
+
+
 void shouldConvert(char number[], int expectedCharacteristic, int expectedNumerator, int expectedDenominator)
 {
 	int c, n, d;
