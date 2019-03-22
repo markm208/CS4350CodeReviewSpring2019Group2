@@ -79,6 +79,10 @@ bool characteristic(char numString[], int& c)
 		{
 			break;
 		}
+		else if (*currentAddress == ' ')
+		{
+			continue;
+		}
 		else if ((*currentAddress <= ASCII_ZERO || *currentAddress >= ASCII_NINE))
 		{
 			isValid = false;
