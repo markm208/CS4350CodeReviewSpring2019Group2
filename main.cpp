@@ -96,7 +96,7 @@ bool characteristic(char numString[], int& c)
 		{
 			continue;
 		}
-		else if ((*currentAddress <= ASCII_ZERO || *currentAddress >= ASCII_NINE))
+		else if ((*currentAddress < ASCII_ZERO || *currentAddress >= ASCII_NINE))
 		{
 			isValid = false;
 			break;
@@ -106,6 +106,11 @@ bool characteristic(char numString[], int& c)
 			//Will continue to add to res and shift digits over by multiplying res by 10
 			res = res * 10 + *currentAddress - '0';
 		}
+	}
+
+	if(!sign)
+	{
+		res = res*-1;
 	}
 
 	//if everything was good, place res into c
@@ -375,6 +380,7 @@ void shouldNotConvert(char number[])
 			<< "was parsed when it should NOT have been." << endl;
 	}
 }
+
 //--
 void testMath()
 {
@@ -815,6 +821,7 @@ char digitToChar(int inputDigit) {
 * len = amount of integers allowed in results array
 */
 
+
 bool subtract(int c1, int n1, int d1, int c2, int n2, int d2, char result[], int len) {
 	//step 1:  find common denominator by multiplying the two
 	int commonD = d1 * d2;
@@ -985,4 +992,3 @@ int firstDigit(int x, int& subtraction) {
 	subtraction = x * count;
 	return x;
 }
-
