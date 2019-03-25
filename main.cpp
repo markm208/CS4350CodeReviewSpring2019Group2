@@ -810,20 +810,8 @@ char digitToChar(int inputDigit) {
     }
 }
 bool divide(int char1, int numerator, int denomerator1, int char2, int numerator2, int denomerator2, char result[], int len);
-bool longdivision(int n, int d, int &c, int &m, int &limit);
+bool longdivisionDivide(int n, int d, int &c, int &m, int &limit);
 
-
-int main() {
-	char result[8];
-	divide(2, 1, 2, 4, 2, 3, result, 8);
-
-	for (int i = 0; i < sizeof(result); i++)
-	{
-		cout << result[i];
-	}
-	system("pause");
-	return 0;
-}
 
 
 
